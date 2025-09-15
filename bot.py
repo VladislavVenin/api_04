@@ -1,8 +1,15 @@
 import telegram
 import decouple
+import os
+import random
+import time
 
 bot = telegram.Bot(token=decouple.config('BOT'))
-image = open("images/spacex_0.jpg")
-bot.send_document(
-    chat_id='@dsdsfasgrg', document=open('images/spacex_0.jpg', 'rb')
-    )
+chat_id = decouple.config('CHANNEL')
+path = 'images'
+images = os.listdir(path)
+while True:
+    bot.send_document(
+        chat_id, document=open(f'{path}/{random.choice(images)}', 'rb')
+        )
+    time.sleep(decouple.config('REST'))
