@@ -1,34 +1,15 @@
 import requests
-import os
 import decouple
-import urllib.parse
-
-
-def download_image(path, filename, image_link):
-    if not os.path.exists(path):
-        os.mkdir(path)
-
-    response = requests.get(image_link)
-    response.raise_for_status()
-
-    with open(f'{path}/{filename}', 'wb') as file:
-        file.write(response.content)
+from dl_by_ext import download_image, get_extension
 
 
 def fetch_spacex_last_launch(path, id='latest'):
     url = f"https://api.spacexdata.com/v5/launches/{id}"
     response = requests.get(url)
-    print(response.url)
     api_response = response.json()
     images = api_response['links']['flickr']['original']
     for index, image in enumerate(images):
         download_image(path, f'spacex_{index}{get_extension(image)}', image)
-
-
-def get_extension(url):
-    extension = os.path.splitext(
-        os.path.split(urllib.parse.urlsplit(url).path)[-1])[-1]
-    return extension
 
 
 def fetch_APOD(path, payload):
@@ -62,4 +43,3 @@ payload = {
     'api_key': decouple.config('NASA_API_TOKEN'),
     'count': 30,
 }
-
