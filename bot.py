@@ -6,7 +6,7 @@ import argparse
 import time
 
 
-def send_picture(chat_id, path, image=None):
+def send_picture(bot, chat_id, path, image=None):
     if image is None:
         images = os.listdir(path)
         image = random.choice(images)
@@ -15,16 +15,25 @@ def send_picture(chat_id, path, image=None):
         )
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('image', type=str, default=None)
-args = parser.parse_args()
-image = args.image
+def main():
+    parser = argparse.ArgumentParser(
+        description='Бот для загрузки сообщений в телеграм'
+    )
+    parser.add_argument('image', type=str, default=None,
+                        help="Путь к файлу который вы хотите отправить"
+                        )
+    args = parser.parse_args()
+    image = args.image
 
-bot = telegram.Bot(token=decouple.config('BOT'))
-chat_id = decouple.config('CHANNEL')
-path = 'images'
+    bot = telegram.Bot(token=decouple.config('TG_BOT'))
+    chat_id = decouple.config('CHANNEL')
+    path = 'images'
 
-while True:
-    send_picture(chat_id, path, image)
-    image = None
-    time.sleep(int(decouple.config('REST')))
+    while True:
+        send_picture(bot, chat_id, path, image)
+        image = None
+        time.sleep(int(decouple.config('REST')))
+
+
+if __name__ == '__main__':
+    main()

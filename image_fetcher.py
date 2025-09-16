@@ -47,11 +47,17 @@ def fetch_EPIC(path, payload):
         download_image(path, f'EPIC_{index}.png', image_response.url)
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('option', type=str)
-parser.add_argument('--path', type=str, default='images')
-parser.add_argument('--count', type=int, default=1)
-parser.add_argument('--id', type=str, default='latest')
+parser = argparse.ArgumentParser(
+    description="Утилита для скачивания фотографий от SpaceX и NASA"
+)
+parser.add_argument('option', type=str,
+                    help='spacex, apod, epic')
+parser.add_argument('--path', type=str, default='images',
+                    help="Путь по которому нужно сохранить файлы, по стандарту images")
+parser.add_argument('--count', type=int, default=1,
+                    help='Кол-во файлов которое требуется сохранить(только APOD)')
+parser.add_argument('--id', type=str, default='latest',
+                    help='Идентификатор запуска SpaceX, по стандарту сохраняет фотографии с последнего запуска.')
 args = parser.parse_args()
 
 path = args.path
