@@ -2,10 +2,10 @@ import requests
 import decouple
 import argparse
 import datetime
-from download_by_extension import download_image, get_extension
+from utils import download_image, get_extension
 
 
-def fetch_spacex_last_launch(path, id):
+def fetch_spacex(path, id):
     url = f"https://api.spacexdata.com/v5/launches/{id}"
 
     response = requests.get(url)
@@ -26,9 +26,7 @@ def fetch_apod(path, payload):
     api_response = response.json()
     for index, image_url in enumerate(api_response):
         image_url = image_url['url']
-        download_image(
-            path, f"APOD_{index}{get_extension(image_url)}", image_url
-            )
+        download_image(path, f"APOD_{index}{get_extension(image_url)}", image_url)
 
 
 def fetch_epic(path, payload):
@@ -52,7 +50,8 @@ def main():
         description="Утилита для скачивания фотографий от SpaceX и NASA"
     )
     parser.add_argument('option', type=str,
-                        help='spacex, apod, epic')
+                        choices=['spacex', 'apod', 'epic'],
+                        help='Выберите, откуда будут браться файлы')
     parser.add_argument('--path', type=str, default='images',
                         help="Путь по которому нужно сохранить файлы, по стандарту images")
     parser.add_argument('--count', type=int, default=1,
@@ -69,7 +68,7 @@ def main():
 
     match option:
         case 'spacex':
-            fetch_spacex_last_launch(args.path, args.id)
+            fetch_spacex(args.path, args.id)
         case 'apod':
             fetch_apod(args.path, payload)
         case 'epic':
