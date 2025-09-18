@@ -18,3 +18,4 @@ def download_image(path, filename, image_link):
 
     with open(f'{path}/{filename}', 'wb') as file:
         file.write(response.content)
+
