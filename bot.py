@@ -28,10 +28,10 @@ def main():
 
     while True:
         send_picture(bot, chat_id, path, image)
-        images = os.listdir(path)
         image = random.choice(images)
         time.sleep(int(rest))
 
 
 if __name__ == '__main__':
     main()
+
